@@ -101,6 +101,7 @@ export default function Home() {
     if (similarity >= 0.8) {
       setScore((prev) => prev + 10);
       setMessage(`Doğru tahmin! +10 puan (Benzerlik: ${Math.round(similarity * 100)}%)`);
+      setBlurLevel(0);
       setTimeout(() => {
         fetchRandomMovie();
       }, 2000);
