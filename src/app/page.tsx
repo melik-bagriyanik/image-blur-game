@@ -114,7 +114,7 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         {currentMovie && (
-          <div style={{ position: "relative", width: "300px", height: "430px" }}>
+          <div className={styles.imageContainer} >
             <Image
               src={currentMovie.poster_path}
               alt="Movie Poster"
@@ -127,7 +127,7 @@ export default function Home() {
             />
           </div>
         )}
-        <div style={{ marginTop: "20px" }}>
+        <div style={{ marginTop: "0" }}>
           <p>Puan: {score}</p>
           {message && <p>{message}</p>}
         </div>
@@ -139,8 +139,9 @@ export default function Home() {
             variant="contained" 
             onClick={handleReduceBlur}
             disabled={blurLevel === 0}
+           style={{ background: "#DDDDDD" ,color: "#000000" ,fontSize: "16px"}}
           >
-            Aç
+           Bluru azalt
           </Button>
         </div>
         <div className={styles.buttonsRow}>
@@ -150,12 +151,14 @@ export default function Home() {
             onChange={(e) => setGuess(e.target.value)}
             placeholder="Film adını yazın"
             disabled={showNextButton}
+             style={{ background: "#ffffff" ,color: "#000000" ,borderRadius: "5px" ,fontSize: "16px",}}
           />
           <Button 
             fullWidth 
             variant="contained" 
             onClick={handleGuess}
             disabled={showNextButton}
+            style={{ background: "#2E2E2E" ,color: "#ffffff",fontSize: "16px" }}
           >
             Tahmin et
           </Button>
@@ -167,6 +170,7 @@ export default function Home() {
               variant="contained" 
               color="secondary"
               onClick={fetchRandomMovie}
+              style={{ background: "#C11119" ,color: "#ffffff",fontWeight: "bold",fontSize: "18px" }}
             >
               Sonraki Film
             </Button>

@@ -1,5 +1,5 @@
 :root {
-  --background: #ffffff;
+  --background:  #0a0a0a;
   --foreground: #171717;
 }
 
@@ -23,7 +23,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+p{
+  color:#A3A3A3;
+}
 * {
   box-sizing: border-box;
   padding: 0;
