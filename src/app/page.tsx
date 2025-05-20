@@ -1,4 +1,4 @@
- "use client"; 
+"use client"; 
 import Image from "next/image";
 import styles from "./page.module.css";
 import Button from "@mui/material/Button";
@@ -16,6 +16,7 @@ export default function Home() {
   const [guess, setGuess] = useState("");
   const [score, setScore] = useState(0);
   const [message, setMessage] = useState("");
+  const [showNextButton, setShowNextButton] = useState(false);
 
   const fetchRandomMovie = async () => {
     try {
@@ -31,6 +32,7 @@ export default function Home() {
       setBlurLevel(20);
       setGuess("");
       setMessage("");
+      setShowNextButton(false);
     } catch (error) {
       console.error("Error fetching movie:", error);
     }
@@ -41,7 +43,13 @@ export default function Home() {
   }, []);
 
   const handleReduceBlur = () => {
-    setBlurLevel((prev) => Math.max(0, prev - 5));
+    const newBlurLevel = Math.max(0, blurLevel - 5);
+    setBlurLevel(newBlurLevel);
+    
+    if (newBlurLevel === 0) {
+      setMessage("Bilemedin! Doğru cevap: " + currentMovie?.title);
+      setShowNextButton(true);
+    }
   };
 
   const handleGuess = () => {
@@ -97,15 +105,29 @@ export default function Home() {
             value={guess}
             onChange={(e) => setGuess(e.target.value)}
             placeholder="Film adını yazın"
+            disabled={showNextButton}
           />
           <Button 
             fullWidth 
             variant="contained" 
             onClick={handleGuess}
+            disabled={showNextButton}
           >
             Tahmin et
           </Button>
         </div>
+        {showNextButton && (
+          <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
+            <Button 
+              fullWidth 
+              variant="contained" 
+              color="secondary"
+              onClick={fetchRandomMovie}
+            >
+              Sonraki Film
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
