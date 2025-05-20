@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { useState, useEffect } from "react";
-
+import Skeleton from "@mui/material/Skeleton";
 interface Movie {
   title: string;
   poster_path: string;
@@ -58,6 +58,8 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [message, setMessage] = useState("");
   const [showNextButton, setShowNextButton] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
 
 const fetchRandomMovie = async () => {
   const categories = ['popular', 'top_rated',  'now_playing'];
@@ -78,7 +80,7 @@ const fetchRandomMovie = async () => {
     }
 
     const randomMovie = moviesWithPoster[Math.floor(Math.random() * moviesWithPoster.length)];
-
+setImageLoaded(false);
     setCurrentMovie({
       title: randomMovie.title,
       poster_path: `https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`,
@@ -130,16 +132,30 @@ const fetchRandomMovie = async () => {
       <main className={styles.main}>
         {currentMovie && (
           <div className={styles.imageContainer} >
-            <Image
-              src={currentMovie.poster_path}
-              alt="Movie Poster"
-              fill
-              style={{
-                objectFit: "cover",
-                filter: `blur(${blurLevel}px)`,
-                transition: "filter 0.3s ease",
-              }}
-            />
+            <div className={styles.imageContainer}>
+  {!imageLoaded && (
+  <Skeleton
+  sx={{ bgcolor: 'grey.900' }}
+  variant="rectangular"
+  width="100%"
+  height="100%"
+/>
+ 
+  )}
+  <Image
+    src={currentMovie.poster_path}
+    alt="Movie Poster"
+    fill
+    onLoadingComplete={() => setImageLoaded(true)}
+    style={{
+      objectFit: "cover",
+      filter: `blur(${blurLevel}px)`,
+      transition: "filter 0.3s ease",
+      opacity: imageLoaded ? 1 : 0,
+    }}
+  />
+</div>
+
           </div>
         )}
         <div style={{ marginTop: "0" }}>
