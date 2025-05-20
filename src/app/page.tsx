@@ -70,7 +70,7 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         {currentMovie && (
-          <div style={{ position: "relative", width: "300px", height: "450px" }}>
+          <div style={{ position: "relative", width: "300px", height: "430px" }}>
             <Image
               src={currentMovie.poster_path}
               alt="Movie Poster"
