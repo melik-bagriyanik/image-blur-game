@@ -15,6 +15,22 @@
   gap: 64px;
   font-family: var(--font-geist-sans);
 }
+.buttonsRow {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+}
+.ButtonsContainer {
+width: 50%;
+}
+.CenterRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 
 @media (prefers-color-scheme: dark) {
   .page {

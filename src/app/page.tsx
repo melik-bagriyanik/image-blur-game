@@ -1,95 +1,112 @@
+ "use client"; 
 import Image from "next/image";
 import styles from "./page.module.css";
+import Button from "@mui/material/Button";
+import { TextField } from "@mui/material";
+import { useState, useEffect } from "react";
+
+interface Movie {
+  title: string;
+  poster_path: string;
+}
 
 export default function Home() {
+  const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
+  const [blurLevel, setBlurLevel] = useState(20);
+  const [guess, setGuess] = useState("");
+  const [score, setScore] = useState(0);
+  const [message, setMessage] = useState("");
+
+  const fetchRandomMovie = async () => {
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=tr-TR`
+      );
+      const data = await response.json();
+      const randomMovie = data.results[Math.floor(Math.random() * data.results.length)];
+      setCurrentMovie({
+        title: randomMovie.title,
+        poster_path: `https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`,
+      });
+      setBlurLevel(20);
+      setGuess("");
+      setMessage("");
+    } catch (error) {
+      console.error("Error fetching movie:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRandomMovie();
+  }, []);
+
+  const handleReduceBlur = () => {
+    setBlurLevel((prev) => Math.max(0, prev - 5));
+  };
+
+  const handleGuess = () => {
+    if (!currentMovie) return;
+    
+    if (guess.toLowerCase() === currentMovie.title.toLowerCase()) {
+      setScore((prev) => prev + 10);
+      setMessage("Doğru tahmin! +10 puan");
+      setTimeout(() => {
+        fetchRandomMovie();
+      }, 2000);
+    } else {
+      setMessage("Yanlış tahmin, tekrar dene!");
+    }
+  };
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        {currentMovie && (
+          <div style={{ position: "relative", width: "300px", height: "450px" }}>
             <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src={currentMovie.poster_path}
+              alt="Movie Poster"
+              fill
+              style={{
+                objectFit: "cover",
+                filter: `blur(${blurLevel}px)`,
+                transition: "filter 0.3s ease",
+              }}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+          </div>
+        )}
+        <div style={{ marginTop: "20px" }}>
+          <p>Puan: {score}</p>
+          {message && <p>{message}</p>}
         </div>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      <div className={styles.ButtonsContainer}>
+        <div className={styles.CenterRow}>
+          <Button 
+            fullWidth 
+            variant="contained" 
+            onClick={handleReduceBlur}
+            disabled={blurLevel === 0}
+          >
+            Aç
+          </Button>
+        </div>
+        <div className={styles.buttonsRow}>
+          <TextField 
+            fullWidth 
+            value={guess}
+            onChange={(e) => setGuess(e.target.value)}
+            placeholder="Film adını yazın"
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <Button 
+            fullWidth 
+            variant="contained" 
+            onClick={handleGuess}
+          >
+            Tahmin et
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
