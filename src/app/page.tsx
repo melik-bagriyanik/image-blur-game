@@ -59,25 +59,40 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [showNextButton, setShowNextButton] = useState(false);
 
-  const fetchRandomMovie = async () => {
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=tr-TR`
-      );
-      const data = await response.json();
-      const randomMovie = data.results[Math.floor(Math.random() * data.results.length)];
-      setCurrentMovie({
-        title: randomMovie.title,
-        poster_path: `https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`,
-      });
-      setBlurLevel(20);
-      setGuess("");
-      setMessage("");
-      setShowNextButton(false);
-    } catch (error) {
-      console.error("Error fetching movie:", error);
+const fetchRandomMovie = async () => {
+  const categories = ['popular', 'top_rated',  'now_playing'];
+  const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+  const randomPage = Math.floor(Math.random() * 50) + 1; // 1-50 arası rastgele sayfa
+
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${randomCategory}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=tr-TR&page=${randomPage}`
+    );
+    const data = await response.json();
+
+    // Poster'ı olanlardan rastgele seçim yap
+    const moviesWithPoster = data.results.filter((movie: any) => movie.poster_path);
+    if (moviesWithPoster.length === 0) {
+      console.warn("Poster içermeyen sonuçlar geldi, tekrar deneniyor...");
+      return fetchRandomMovie(); // poster olmayanlardan seçilirse tekrar dene
     }
-  };
+
+    const randomMovie = moviesWithPoster[Math.floor(Math.random() * moviesWithPoster.length)];
+
+    setCurrentMovie({
+      title: randomMovie.title,
+      poster_path: `https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`,
+    });
+
+    setBlurLevel(20);
+    setGuess("");
+    setMessage("");
+    setShowNextButton(false);
+  } catch (error) {
+    console.error("Error fetching movie:", error);
+  }
+};
+
 
   useEffect(() => {
     fetchRandomMovie();
