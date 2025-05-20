@@ -10,6 +10,47 @@ interface Movie {
   poster_path: string;
 }
 
+// String similarity function
+function calculateSimilarity(str1: string, str2: string): number {
+  const s1 = str1.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const s2 = str2.toLowerCase().replace(/[^a-z0-9]/g, '');
+  
+  if (s1.length === 0 || s2.length === 0) return 0;
+  
+  const longer = s1.length > s2.length ? s1 : s2;
+  const shorter = s1.length > s2.length ? s2 : s1;
+  
+  if (longer.length === 0) return 1.0;
+  
+  return (longer.length - editDistance(longer, shorter)) / longer.length;
+}
+
+// Levenshtein distance implementation
+function editDistance(s1: string, s2: string): number {
+  const m = s1.length;
+  const n = s2.length;
+  const dp: number[][] = Array(m + 1).fill(0).map(() => Array(n + 1).fill(0));
+
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (s1[i - 1] === s2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = Math.min(
+          dp[i - 1][j - 1] + 1, // substitution
+          dp[i - 1][j] + 1,     // deletion
+          dp[i][j - 1] + 1      // insertion
+        );
+      }
+    }
+  }
+
+  return dp[m][n];
+}
+
 export default function Home() {
   const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
   const [blurLevel, setBlurLevel] = useState(20);
@@ -55,9 +96,11 @@ export default function Home() {
   const handleGuess = () => {
     if (!currentMovie) return;
     
-    if (guess.toLowerCase() === currentMovie.title.toLowerCase()) {
+    const similarity = calculateSimilarity(guess, currentMovie.title);
+    
+    if (similarity >= 0.8) {
       setScore((prev) => prev + 10);
-      setMessage("Doğru tahmin! +10 puan");
+      setMessage(`Doğru tahmin! +10 puan (Benzerlik: ${Math.round(similarity * 100)}%)`);
       setTimeout(() => {
         fetchRandomMovie();
       }, 2000);
