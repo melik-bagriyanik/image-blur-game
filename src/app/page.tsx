@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import { useState, useEffect } from "react";
 import Skeleton from "@mui/material/Skeleton";
+import ScoreBar from "./components/ScoreBar";
 interface Movie {
   title: string;
   poster_path: string;
@@ -129,7 +130,10 @@ setImageLoaded(false);
 
   return (
     <div className={styles.page}>
+      <ScoreBar score={score} />
+       <div style={{ flex: "1" }}>
       <main className={styles.main}>
+       
         {currentMovie && (
           <div className={styles.imageContainer} >
             <div className={styles.imageContainer}>
@@ -208,6 +212,14 @@ setImageLoaded(false);
           </div>
         )}
       </div>
-    </div>
+      </div>
+      <div style={{ flex: "1" }}>
+        <div className={styles.footer}>
+          <p>Film tahmin oyunu</p>
+          <p>Yapımcı: [Melik Bağrıyanık]</p>
+          <p>Github: <a href="https://github.com/melikbagriyanik">https://github.com/melikbagriyanik</a></p>
+        </div>
+      </div>
+          </div>
   );
 }

@@ -1,0 +1,75 @@
+.wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  flex: 1;
+}
+
+.labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 400px;
+  font-size: 14px;
+}
+
+.labelItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #f0f0f0;
+  margin: 12px 0;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #4caf50;
+}
+
+.scoreBarContainer {
+  height: 400px;
+  width: 80px;
+  border: 2px solid #ccc;
+  position: relative;
+  background-color: #f0f0f0;
+ overflow: hidden;
+  border-radius: 50px;
+    box-shadow: 0 0 15px 5px rgba(171, 171, 171, 0.6);
+}
+
+.scoreBarBackground {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.scoreBarFill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(to top, #4caf50, #81c784);
+  transition: height 1.5s ease-in-out;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8),
+              0 0 20px 10px rgba(255, 255, 255, 0.6);
+  border-radius: 0 0 12px 12px;
+}
+
+
+.character {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  transition: bottom 1s ease-in-out;
+}
+
+.icon {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  animation: fadeIn 1s ease-in-out;
+}

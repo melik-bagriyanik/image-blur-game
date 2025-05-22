@@ -1,9 +1,9 @@
 .page {
 padding: 50px 50px 10px 50px ;
 display: flex;
-justify-content: center;
+justify-content: space-around;
 align-items: center;
-flex-direction: column;
+flex-direction: row;
 gap: 32px;
 width: 100%;
 
@@ -25,7 +25,7 @@ border-radius: 16px;
   margin-top: 10px;
 }
 .ButtonsContainer {
-width: 50%;
+width: 100%;
 }
 .CenterRow {
   display: flex;
