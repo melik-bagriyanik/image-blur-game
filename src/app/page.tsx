@@ -131,7 +131,7 @@ setImageLoaded(false);
   return (
     <div className={styles.page}>
       <ScoreBar score={score} />
-       <div style={{ flex: "1" }}>
+       <div style={{ flex: "1",height: "100vh", }}>
       <main className={styles.main}>
        
         {currentMovie && (
@@ -156,13 +156,14 @@ setImageLoaded(false);
       filter: `blur(${blurLevel}px)`,
       transition: "filter 0.3s ease",
       opacity: imageLoaded ? 1 : 0,
+          pointerEvents: "none", 
     }}
   />
 </div>
 
        
         )}
-        <div style={{ marginTop: "0" }}>
+        <div style={{ marginTop: "0",height: "40px", }}>
           <p>Puan: {score}</p>
           {message && <p>{message}</p>}
         </div>
