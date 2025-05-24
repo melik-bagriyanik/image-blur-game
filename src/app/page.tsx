@@ -63,7 +63,7 @@ export default function Home() {
 
 
 const fetchRandomMovie = async () => {
-  const categories = ['popular', 'top_rated',  'now_playing'];
+  const categories = ['top_rated'];
   const randomCategory = categories[Math.floor(Math.random() * categories.length)];
   const randomPage = Math.floor(Math.random() * 50) + 1; // 1-50 arası rastgele sayfa
 
@@ -73,15 +73,21 @@ const fetchRandomMovie = async () => {
     );
     const data = await response.json();
 
-    // Poster'ı olanlardan rastgele seçim yap
-    const moviesWithPoster = data.results.filter((movie: any) => movie.poster_path);
+    // Poster'ı olan ve dil filtresine uyan filmler
+    const moviesWithPoster = data.results.filter(
+      (movie: any) =>
+        movie.poster_path &&
+        !["cn", "zh", "ru","ja"].includes(movie.original_language)
+    );
+
     if (moviesWithPoster.length === 0) {
-      console.warn("Poster içermeyen sonuçlar geldi, tekrar deneniyor...");
-      return fetchRandomMovie(); // poster olmayanlardan seçilirse tekrar dene
+      console.warn("Uygun film bulunamadı, tekrar deneniyor...");
+      return fetchRandomMovie(); // uygun film yoksa yeniden dene
     }
 
     const randomMovie = moviesWithPoster[Math.floor(Math.random() * moviesWithPoster.length)];
-setImageLoaded(false);
+    
+    setImageLoaded(false);
     setCurrentMovie({
       title: randomMovie.title,
       poster_path: `https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`,
@@ -95,6 +101,7 @@ setImageLoaded(false);
     console.error("Error fetching movie:", error);
   }
 };
+
 
 
   useEffect(() => {
@@ -218,7 +225,7 @@ setImageLoaded(false);
         <div className={styles.footer}>
           <p>Film tahmin oyunu</p>
           <p>Yapımcı: [Melik Bağrıyanık]</p>
-          <p>Github: <a href="https://github.com/melikbagriyanik">https://github.com/melikbagriyanik</a></p>
+          <p>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>
         </div>
       </div>
           </div>
