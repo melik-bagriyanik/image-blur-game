@@ -1,13 +1,12 @@
 .page {
-padding: 0 50px 10px 50px ;
+padding:0 ;
 display: flex;
 justify-content: space-around;
 align-items: center;
 flex-direction: row;
 gap: 32px;
 width: 100%;
-
-background: var(--background);
+  background: linear-gradient(135deg, #343434 0%, #000000 50%, #383838 100%);
 border-radius: 16px;  
 }
 
@@ -20,6 +19,11 @@ border-radius: 16px;
 .middleColumn{
   flex: 1;
   height: 100%;
+
+  border-radius: 16px;
+
+  backdrop-filter: blur(5px);
+
 }
 .lastColumn {
   flex: 1;
