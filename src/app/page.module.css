@@ -51,6 +51,7 @@ width: 100%;
   gap: 22px;
   justify-content: center;
 align-items: center;
+min-height: 550px;
 }
 
 .main ol {

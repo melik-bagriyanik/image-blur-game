@@ -135,7 +135,7 @@ setImageLoaded(false);
       <main className={styles.main}>
        
         {currentMovie && (
-          <div className={styles.imageContainer} >
+          
             <div className={styles.imageContainer}>
   {!imageLoaded && (
   <Skeleton
@@ -160,7 +160,7 @@ setImageLoaded(false);
   />
 </div>
 
-          </div>
+       
         )}
         <div style={{ marginTop: "0" }}>
           <p>Puan: {score}</p>
