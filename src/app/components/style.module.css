@@ -4,7 +4,12 @@
   gap: 24px;
   flex: 1;
 }
-
+@media screen and (max-width: 768px) {
+  .wrapper {
+   display: none;
+  }
+  
+}
 .labels {
   display: flex;
   flex-direction: column;

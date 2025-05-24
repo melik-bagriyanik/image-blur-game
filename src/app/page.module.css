@@ -17,6 +17,16 @@ border-radius: 16px;
   height: 450px;
  /* border: 1px solid #ccc; */
 }
+.middleColumn{
+  flex: 1;
+  height: 100%;
+}
+@media screen and (max-width: 600px) {
+  .lastColumn {
+  display: none;
+  }
+  
+}
 .buttonsRow {
   display: flex;
   gap: 16px;

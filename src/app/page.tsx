@@ -137,8 +137,8 @@ const fetchRandomMovie = async () => {
 
   return (
     <div className={styles.page}>
-      <ScoreBar score={score} />
-       <div style={{ flex: "1",height: "100vh", }}>
+      <ScoreBar  score={score} />
+       <div className={styles.middleColumn} >
       <main className={styles.main}>
        
         {currentMovie && (
@@ -221,7 +221,7 @@ const fetchRandomMovie = async () => {
         )}
       </div>
       </div>
-      <div style={{ flex: "1" }}>
+      <div className={styles.lastColumn} style={{ flex: "1" }}>
         <div className={styles.footer}>
           <p>Film tahmin oyunu</p>
           <p>Yapımcı: [Melik Bağrıyanık]</p>
