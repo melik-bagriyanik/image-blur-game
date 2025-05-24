@@ -187,25 +187,40 @@ const fetchRandomMovie = async () => {
            Bluru azalt
           </Button>
         </div>
-        <div className={styles.buttonsRow}>
-          <TextField 
-            fullWidth 
-            value={guess}
-            onChange={(e) => setGuess(e.target.value)}
-            placeholder="Film adını yazın"
-            disabled={showNextButton}
-             style={{ background: "#ffffff" ,color: "#000000" ,borderRadius: "5px" ,fontSize: "16px",}}
-          />
-          <Button 
-            fullWidth 
-            variant="contained" 
-            onClick={handleGuess}
-            disabled={showNextButton}
-            style={{ background: "#2E2E2E" ,color: "#ffffff",fontSize: "16px" }}
-          >
-            Tahmin et
-          </Button>
-        </div>
+<div className={styles.buttonsRow}>
+  <TextField 
+    fullWidth 
+    value={guess}
+    onChange={(e) => setGuess(e.target.value)}
+    placeholder="Film adını yazın"
+    disabled={showNextButton}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" && !showNextButton) {
+        handleGuess();
+      }
+    }}
+    style={{ 
+      background: "#ffffff",
+      color: "#000000",
+      borderRadius: "5px",
+      fontSize: "16px",
+    }}
+  />
+  <Button 
+    fullWidth 
+    variant="contained" 
+    onClick={handleGuess}
+    disabled={showNextButton}
+    style={{ 
+      background: "#2E2E2E",
+      color: "#ffffff",
+      fontSize: "16px"
+    }}
+  >
+    Tahmin et
+  </Button>
+</div>
+
         {showNextButton && (
           <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
             <Button 
