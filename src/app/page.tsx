@@ -250,11 +250,28 @@ export default function Home() {
       </div>
       <div className={styles.lastColumn} style={{ flex: "1" }}>
         <div className={styles.footer}>
-          <p>Film tahmin oyunu</p>
-          <p>Yapımcı: [Melik Bağrıyanık]</p>
-          <p>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>
+          <div className={styles.scoringInfo}>
+            <h3>Puanlama Sistemi</h3>
+            <div className={styles.scoreRule}>
+              <span className={styles.scoreDot}></span>
+              <p>Blur azaltmadan bilme: <span className={styles.scoreValue}>+10 puan</span></p>
+            </div>
+            <div className={styles.scoreRule}>
+              <span className={styles.scoreDot}></span>
+              <p>Her blur azaltmada: <span className={styles.scoreValue}>-2 puan</span></p>
+            </div>
+            <div className={styles.scoreRule}>
+              <span className={styles.scoreDot}></span>
+              <p>Minimum puan: <span className={styles.scoreValue}>0 puan</span></p>
+            </div>
+          </div>
+          <div className={styles.footerContent}>
+            <p style={{ fontWeight: "bold" , fontSize: "18px",marginBottom: "8px"}}>Film tahmin oyunu</p>
+            <p>Yapımcı: [Melik Bağrıyanık]</p>
+            <p>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>
+          </div>
         </div>
       </div>
           </div>
-  );
+  );  
 }
