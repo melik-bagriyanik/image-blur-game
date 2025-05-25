@@ -3,19 +3,24 @@
   align-items: flex-end;
   gap: 24px;
   flex: 1;
-  background-image: url('/stars.jpg');
+
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
+  overflow: hidden;
+  padding-top: 120px;
+
 }
 
 .wrapper::before {
+  
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
+
   height: 200px;
   background-image: url('/astronaut.png');
   background-size: contain;
@@ -27,12 +32,13 @@
 
 .wrapper::after {
   content: '';
+    filter: brightness(0.2);
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(11, 0, 52, 0.122);
   z-index: 0;
 }
 
@@ -53,10 +59,26 @@
 
 @media screen and (max-width: 768px) {
   .wrapper {
-   display: none;
+    display: none;
   }
-  
 }
+
+@media screen and (max-width: 1200px) {
+  .labels::before {
+    width: 100px;
+    height: 100px;
+    top: -80px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .labels::before {
+    width: 80px;
+    height: 80px;
+    top: -60px;
+  }
+}
+
 .labels {
   display: flex;
   flex-direction: column;
@@ -66,19 +88,18 @@
   position: relative;
   z-index: 2;
   padding: 10px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 12px;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
 }
 
 .labels::before {
   content: '';
   position: absolute;
-  top: -120px;
-  left: 200px;
+  top: -100px;
   right: 0;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   background-image: url('/astronot.png');
   background-size: contain;
   background-position: center;
