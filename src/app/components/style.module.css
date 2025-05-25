@@ -57,9 +57,13 @@
   flex-direction: column;
   justify-content: space-between;
   height: 400px;
-  font-size: 14px;
+  font-size: 15px;
   position: relative;
   z-index: 2;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
 }
 
 .labelItem {
@@ -69,20 +73,35 @@
   color: #ffffff;
   margin: 12px 0;
   font-weight: 500;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.labelItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background-color: #4caf50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+  transition: all 0.3s ease;
+}
+
+.labelItem:hover .dot {
+  transform: scale(1.2);
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.9);
 }
 
 .scoreBarContainer {
   height: 400px;
-  width: 80px;
+  width: 50px;
   border: 2px solid #ccc;
   position: relative;
   background-color: #f0f0f0;
@@ -102,14 +121,22 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  background: linear-gradient(to top, #4caf50, #81c784);
+  background: linear-gradient(to top, #323232, #9b9b9b);
   transition: height 1.5s ease-in-out;
   box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8),
               0 0 20px 10px rgba(255, 255, 255, 0.6);
   border-radius: 0 0 12px 12px;
 }
 
+.styleText{
 
+text-align: center;
+margin-top: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
 .character {
   position: absolute;
   left: 50%;

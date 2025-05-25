@@ -30,8 +30,8 @@ const ScoreBar: React.FC<ScoreBarProps> = ({ score }) => {
             className={styles.scoreBarFill}
             style={{ height: `${animatedScore}%` }}
           >
-      
-            <div className={styles.icon}>{getIcon(animatedScore)}</div>
+      <div className={styles.styleText}>{score}</div>
+            {/* <div className={styles.icon}>{getIcon(animatedScore)}</div> */}
           </div>
         </div>
       </div>
