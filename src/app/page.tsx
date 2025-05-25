@@ -8,6 +8,7 @@ import Skeleton from "@mui/material/Skeleton";
 import ScoreBar from "./components/ScoreBar";
 interface Movie {
   title: string;
+  original_title: string;
   poster_path: string;
 }
 
@@ -91,6 +92,7 @@ export default function Home() {
       setImageLoaded(false);
       setCurrentMovie({
         title: randomMovie.title,
+        original_title: randomMovie.original_title,
         poster_path: `https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`,
       });
 
@@ -122,11 +124,14 @@ export default function Home() {
   const handleGuess = () => {
     if (!currentMovie) return;
     
-    const similarity = calculateSimilarity(guess, currentMovie.title);
+    const similarityWithTitle = calculateSimilarity(guess, currentMovie.title);
+    const similarityWithOriginalTitle = calculateSimilarity(guess, currentMovie.original_title);
+    const similarity = Math.max(similarityWithTitle, similarityWithOriginalTitle);
     
     if (similarity >= 0.8) {
       const pointsToAdd = Math.max(0, 10 - (blurReductions * 2));
       setScore((prev) => prev + pointsToAdd);
+      const correctTitle = similarityWithTitle >= similarityWithOriginalTitle ? currentMovie.title : currentMovie.original_title;
       setMessage(`Doğru tahmin! +${pointsToAdd} puan (Benzerlik: ${Math.round(similarity * 100)}%)`);
       setBlurLevel(0);
       setTimeout(() => {
