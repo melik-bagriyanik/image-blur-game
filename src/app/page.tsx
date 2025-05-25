@@ -60,49 +60,47 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [showNextButton, setShowNextButton] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [blurReductions, setBlurReductions] = useState(0);
 
+  const fetchRandomMovie = async () => {
+    const categories = ['top_rated'];
+    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+    const randomPage = Math.floor(Math.random() * 50) + 1;
 
-const fetchRandomMovie = async () => {
-  const categories = ['top_rated'];
-  const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-  const randomPage = Math.floor(Math.random() * 50) + 1; // 1-50 arası rastgele sayfa
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${randomCategory}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=tr-TR&page=${randomPage}`
+      );
+      const data = await response.json();
 
-  try {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${randomCategory}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=tr-TR&page=${randomPage}`
-    );
-    const data = await response.json();
+      const moviesWithPoster = data.results.filter(
+        (movie: any) =>
+          movie.poster_path &&
+          !["cn", "zh", "ru","ja"].includes(movie.original_language)
+      );
 
-    // Poster'ı olan ve dil filtresine uyan filmler
-    const moviesWithPoster = data.results.filter(
-      (movie: any) =>
-        movie.poster_path &&
-        !["cn", "zh", "ru","ja"].includes(movie.original_language)
-    );
+      if (moviesWithPoster.length === 0) {
+        console.warn("Uygun film bulunamadı, tekrar deneniyor...");
+        return fetchRandomMovie();
+      }
 
-    if (moviesWithPoster.length === 0) {
-      console.warn("Uygun film bulunamadı, tekrar deneniyor...");
-      return fetchRandomMovie(); // uygun film yoksa yeniden dene
+      const randomMovie = moviesWithPoster[Math.floor(Math.random() * moviesWithPoster.length)];
+      
+      setImageLoaded(false);
+      setCurrentMovie({
+        title: randomMovie.title,
+        poster_path: `https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`,
+      });
+
+      setBlurLevel(20);
+      setGuess("");
+      setMessage("");
+      setShowNextButton(false);
+      setBlurReductions(0);
+    } catch (error) {
+      console.error("Error fetching movie:", error);
     }
-
-    const randomMovie = moviesWithPoster[Math.floor(Math.random() * moviesWithPoster.length)];
-    
-    setImageLoaded(false);
-    setCurrentMovie({
-      title: randomMovie.title,
-      poster_path: `https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`,
-    });
-
-    setBlurLevel(20);
-    setGuess("");
-    setMessage("");
-    setShowNextButton(false);
-  } catch (error) {
-    console.error("Error fetching movie:", error);
-  }
-};
-
-
+  };
 
   useEffect(() => {
     fetchRandomMovie();
@@ -111,6 +109,7 @@ const fetchRandomMovie = async () => {
   const handleReduceBlur = () => {
     const newBlurLevel = Math.max(0, blurLevel - 5);
     setBlurLevel(newBlurLevel);
+    setBlurReductions(prev => prev + 1);
     
     if (newBlurLevel === 0) {
       setMessage("Bilemedin! Doğru cevap: " + currentMovie?.title);
@@ -124,8 +123,9 @@ const fetchRandomMovie = async () => {
     const similarity = calculateSimilarity(guess, currentMovie.title);
     
     if (similarity >= 0.8) {
-      setScore((prev) => prev + 10);
-      setMessage(`Doğru tahmin! +10 puan (Benzerlik: ${Math.round(similarity * 100)}%)`);
+      const pointsToAdd = Math.max(0, 10 - (blurReductions * 2));
+      setScore((prev) => prev + pointsToAdd);
+      setMessage(`Doğru tahmin! +${pointsToAdd} puan (Benzerlik: ${Math.round(similarity * 100)}%)`);
       setBlurLevel(0);
       setTimeout(() => {
         fetchRandomMovie();
