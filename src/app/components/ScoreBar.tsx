@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import styles from './style.module.css';
+import React, { useState, useEffect } from "react";
+import styles from "./style.module.css";
 
 interface ScoreBarProps {
   score: number;
@@ -11,15 +11,15 @@ const ScoreBar: React.FC<ScoreBarProps> = ({ score }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimatedScore(score);
-    }, 100);
+    }, 200);
     return () => clearTimeout(timeout);
   }, [score]);
 
   const getIcon = (score: number) => {
-    if (score < 30) return '😵';
-    if (score < 60) return '📽️';
-    if (score < 100) return '🎬';
-    return '🤓';
+    if (score < 40) return "🎬"; // Movie beginner
+    if (score < 60) return "📽️"; // Casual watcher
+    if (score < 90) return "😎"; // Movie fan
+    return "🤓"; // Geek
   };
 
   return (
@@ -30,23 +30,28 @@ const ScoreBar: React.FC<ScoreBarProps> = ({ score }) => {
             className={styles.scoreBarFill}
             style={{ height: `${animatedScore}%` }}
           >
-      <div className={styles.styleText}>{score}</div>
-            {/* <div className={styles.icon}>{getIcon(animatedScore)}</div> */}
+            <div
+              className={styles.character}
+              style={{ bottom: `${animatedScore - 5}%` }}
+            >
+              {getIcon(animatedScore)}
+            </div>
           </div>
         </div>
       </div>
-          <div className={styles.labels}>
+
+      <div className={styles.labels}>
         <div className={styles.labelItem}>
-          <span className={styles.dot}></span> Tam bir Geek! 🤓
+          <span className={styles.dot}></span> Gerçek bir sinema tutkunu 🤓
         </div>
         <div className={styles.labelItem}>
-          <span className={styles.dot}></span> Film işi senden sorulur 😵
+          <span className={styles.dot}></span> Film kültürün gayet yerinde 😎
         </div>
         <div className={styles.labelItem}>
-          <span className={styles.dot}></span> Yılda bir sinemaya gider 📽️
+          <span className={styles.dot}></span> Arada sırada film izler 📽️
         </div>
         <div className={styles.labelItem}>
-          <span className={styles.dot}></span> Film Cahili 🎬
+          <span className={styles.dot}></span> Yeni başlıyorsun 🎬
         </div>
       </div>
     </div>

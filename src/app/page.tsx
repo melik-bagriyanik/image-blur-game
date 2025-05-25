@@ -170,7 +170,7 @@ const fetchRandomMovie = async () => {
 
        
         )}
-        <div style={{ marginTop: "0",height: "40px", }}>
+        <div style={{ marginBottom: "10px",height: "40px", }}>
           <p>Puan: {score}</p>
           {message && <p>{message}</p>}
         </div>
@@ -221,7 +221,7 @@ const fetchRandomMovie = async () => {
   </Button>
 </div>
 
-        {showNextButton && (
+        {showNextButton ? (
           <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
             <Button 
               fullWidth 
@@ -231,6 +231,18 @@ const fetchRandomMovie = async () => {
               style={{ background: "#C11119" ,color: "#ffffff",fontWeight: "bold",fontSize: "18px" }}
             >
               Sonraki Film
+            </Button>
+          </div>
+        ): (
+          <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
+            <Button 
+              fullWidth 
+              variant="contained" 
+              color="primary"
+              onClick={fetchRandomMovie}
+              style={{ background: "#2E2E2E" ,color: "#ffffff",fontWeight: "bold",fontSize: "18px" }}
+            >
+              Yeni Film
             </Button>
           </div>
         )}
