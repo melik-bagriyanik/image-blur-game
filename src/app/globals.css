@@ -25,6 +25,7 @@ body {
 }
 p{
   color:#A3A3A3;
+    font-family: var(--font-oswald);
 }
 * {
   box-sizing: border-box;

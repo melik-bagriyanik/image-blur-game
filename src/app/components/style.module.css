@@ -53,6 +53,10 @@
   
 }
 .labels {
+  font-family: var(--font-oswald);
+      font-optical-sizing: auto;
+
+  font-style: normal;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
