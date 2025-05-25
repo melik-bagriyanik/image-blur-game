@@ -72,7 +72,7 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${randomCategory}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=tr-TR&page=${randomPage}`
+        `https://api.themoviedb.org/3/movie/${randomCategory}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&page=${randomPage}`
       );
       const data = await response.json();
 
