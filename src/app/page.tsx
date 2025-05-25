@@ -27,6 +27,8 @@ function calculateSimilarity(str1: string, str2: string): number {
 }
 
 // Levenshtein distance implementation
+// This function calculates the edit distance between two strings
+// which is used to determine how similar they are.
 function editDistance(s1: string, s2: string): number {
   const m = s1.length;
   const n = s2.length;

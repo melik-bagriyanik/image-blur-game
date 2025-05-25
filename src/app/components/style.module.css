@@ -3,8 +3,39 @@
   align-items: flex-end;
   gap: 24px;
   flex: 1;
-  background-image: url('/left.png');
+  background-image: url('/stars.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
 }
+
+.wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background-image: url('/astronaut.png');
+  background-size: contain;
+  background-position: center top;
+  background-repeat: no-repeat;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
 .wrapper {
   flex: 1;
   height: 100%;
@@ -20,32 +51,6 @@
   background-repeat: no-repeat;
 }
 
-.wrapper::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 0;
-}
-
-.wrapper::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  /* background: linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%),
-              linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%);
-  background-size: 20px 20px; */
-  background-position: 0 0, 10px 10px;
-  pointer-events: none;
-  z-index: 1;
-}
-
 @media screen and (max-width: 768px) {
   .wrapper {
    display: none;
@@ -53,10 +58,6 @@
   
 }
 .labels {
-  font-family: var(--font-oswald);
-      font-optical-sizing: auto;
-
-  font-style: normal;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -68,6 +69,22 @@
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
   backdrop-filter: blur(8px);
+}
+
+.labels::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  left: 200px;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background-image: url('/astronot.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 3;
+  pointer-events: none;
 }
 
 .labelItem {
@@ -82,6 +99,7 @@
   border-radius: 8px;
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.05);
+  margin-top: 20px;
 }
 
 .labelItem:hover {
