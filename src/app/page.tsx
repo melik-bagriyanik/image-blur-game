@@ -6,10 +6,17 @@ import { TextField } from "@mui/material";
 import { useState, useEffect } from "react";
 import Skeleton from "@mui/material/Skeleton";
 import ScoreBar from "./components/ScoreBar";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+
 interface Movie {
   title: string;
   original_title: string;
   poster_path: string;
+  director?: string;
+  overview?: string;
+  release_date?: string;
+  id: number;
 }
 
 // String similarity function
@@ -64,6 +71,45 @@ export default function Home() {
   const [showNextButton, setShowNextButton] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [blurReductions, setBlurReductions] = useState(0);
+  const [showMovieInfo, setShowMovieInfo] = useState(false);
+  const [showInsufficientPoints, setShowInsufficientPoints] = useState(false);
+
+  const fetchMovieDetails = async (movieId: number) => {
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=tr-TR&append_to_response=credits`
+      );
+      const data = await response.json();
+      
+      const director = data.credits.crew.find((person: any) => person.job === "Director")?.name;
+      
+      setCurrentMovie(prev => prev ? {
+        ...prev,
+        director: director || "Bilinmiyor",
+        overview: data.overview,
+        release_date: data.release_date
+      } : null);
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+    }
+  };
+
+  const handleGetMovieInfo = () => {
+    if (score >= 5 && currentMovie) {
+      setScore(prev => prev - 5);
+      setShowMovieInfo(true);
+      if (!currentMovie.director) {
+        fetchMovieDetails(currentMovie.id);
+      }
+    } else {
+      setShowInsufficientPoints(true);
+      setTimeout(() => setShowInsufficientPoints(false), 2000);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowMovieInfo(false);
+  };
 
   const fetchRandomMovie = async () => {
     const categories = ['top_rated'];
@@ -94,6 +140,7 @@ export default function Home() {
         title: randomMovie.title,
         original_title: randomMovie.original_title,
         poster_path: `https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`,
+        id: randomMovie.id
       });
 
       setBlurLevel(20);
@@ -101,6 +148,7 @@ export default function Home() {
       setMessage("");
       setShowNextButton(false);
       setBlurReductions(0);
+      setShowMovieInfo(false);
     } catch (error) {
       console.error("Error fetching movie:", error);
     }
@@ -143,142 +191,190 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.page}>
-      <ScoreBar  score={score} />
-       <div className={styles.middleColumn} >
-      <main className={styles.main}>
-       
-        {currentMovie && (
-          
-            <div className={styles.imageContainer}>
-  {!imageLoaded && (
-  <Skeleton
-  sx={{ bgcolor: 'grey.900' }}
-  variant="rectangular"
-  width="100%"
-  height="100%"
-/>
- 
-  )}
-  <Image
-    src={currentMovie.poster_path}
-    alt="Movie Poster"
-    fill
-    onLoadingComplete={() => setImageLoaded(true)}
-    style={{
-      objectFit: "cover",
-      filter: `blur(${blurLevel}px)`,
-      transition: "filter 0.3s ease",
-      opacity: imageLoaded ? 1 : 0,
-          pointerEvents: "none", 
-    }}
-  />
-</div>
+    <>
+      <div className={styles.page}>
+        <ScoreBar score={score} />
+        <div className={styles.middleColumn}>
+          <main className={styles.main}>
+            {currentMovie && (
+              <div className={styles.imageContainer}>
+                {!imageLoaded && (
+                  <Skeleton
+                    sx={{ bgcolor: 'grey.900' }}
+                    variant="rectangular"
+                    width="100%"
+                    height="100%"
+                  />
+                )}
+                <Image
+                  src={currentMovie.poster_path}
+                  alt="Movie Poster"
+                  fill
+                  onLoadingComplete={() => setImageLoaded(true)}
+                  style={{
+                    objectFit: "cover",
+                    filter: `blur(${blurLevel}px)`,
+                    transition: "filter 0.3s ease",
+                    opacity: imageLoaded ? 1 : 0,
+                    pointerEvents: "none",
+                  }}
+                />
+              </div>
+            )}
+            <div style={{ marginBottom: "10px", height: "40px" }}>
+              <p>Puan: {score}</p>
+              {message && <p>{message}</p>}
+              {showInsufficientPoints && (
+                <p className={styles.insufficientPoints}>Film bilgisi almak için en az 5 puan gerekli!</p>
+              )}
+              {showMovieInfo && currentMovie && (
+                <div className={styles.movieInfo}>
+                  <p>Yönetmen: {currentMovie.director}</p>
+                  <p>Çıkış Tarihi: {currentMovie.release_date}</p>
+                  <p>Özet: {currentMovie.overview}</p>
+                </div>
+              )}
+            </div>
+          </main>
+          <div className={styles.ButtonsContainer}>
+            <div className={styles.CenterRow}>
+              <Button 
+                fullWidth 
+                variant="contained" 
+                onClick={handleReduceBlur}
+                disabled={blurLevel === 0}
+               style={{ background: "#DDDDDD" ,color: "#000000" ,fontSize: "16px"}}
+              >
+               Bluru azalt
+              </Button>
+            </div>
+    <div className={styles.buttonsRow}>
+      <TextField 
+        fullWidth 
+        value={guess}
+        onChange={(e) => setGuess(e.target.value)}
+        placeholder="Film adını yazın"
+        disabled={showNextButton}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !showNextButton) {
+            handleGuess();
+          }
+        }}
+        style={{ 
+          background: "#ffffff",
+          color: "#000000",
+          borderRadius: "5px",
+          fontSize: "16px",
+        }}
+      />
+      <Button 
+        fullWidth 
+        variant="contained" 
+        onClick={handleGuess}
+        disabled={showNextButton}
+        style={{ 
+          background: "#2E2E2E",
+          color: "#ffffff",
+          fontSize: "16px"
+        }}
+      >
+        Tahmin et
+      </Button>
+    </div>
 
-       
-        )}
-        <div style={{ marginBottom: "10px",height: "40px", }}>
-          <p>Puan: {score}</p>
-          {message && <p>{message}</p>}
-        </div>
-      </main>
-      <div className={styles.ButtonsContainer}>
-        <div className={styles.CenterRow}>
-          <Button 
-            fullWidth 
-            variant="contained" 
-            onClick={handleReduceBlur}
-            disabled={blurLevel === 0}
-           style={{ background: "#DDDDDD" ,color: "#000000" ,fontSize: "16px"}}
-          >
-           Bluru azalt
-          </Button>
-        </div>
-<div className={styles.buttonsRow}>
-  <TextField 
-    fullWidth 
-    value={guess}
-    onChange={(e) => setGuess(e.target.value)}
-    placeholder="Film adını yazın"
-    disabled={showNextButton}
-    onKeyDown={(e) => {
-      if (e.key === "Enter" && !showNextButton) {
-        handleGuess();
-      }
-    }}
-    style={{ 
-      background: "#ffffff",
-      color: "#000000",
-      borderRadius: "5px",
-      fontSize: "16px",
-    }}
-  />
-  <Button 
-    fullWidth 
-    variant="contained" 
-    onClick={handleGuess}
-    disabled={showNextButton}
-    style={{ 
-      background: "#2E2E2E",
-      color: "#ffffff",
-      fontSize: "16px"
-    }}
-  >
-    Tahmin et
-  </Button>
-</div>
+            <div className={styles.buttonsRow}>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={handleGetMovieInfo}
+                disabled={showNextButton}
+                style={{
+                  background: "#4caf50",
+                  color: "#ffffff",
+                  fontSize: "16px"
+                }}
+              >
+                Film Bilgisi Al (5 puan)
+              </Button>
+            </div>
 
-        {showNextButton ? (
-          <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
-            <Button 
-              fullWidth 
-              variant="contained" 
-              color="secondary"
-              onClick={fetchRandomMovie}
-              style={{ background: "#C11119" ,color: "#ffffff",fontWeight: "bold",fontSize: "18px" }}
-            >
-              Sonraki Film
-            </Button>
+            {showNextButton ? (
+              <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
+                <Button 
+                  fullWidth 
+                  variant="contained" 
+                  color="secondary"
+                  onClick={fetchRandomMovie}
+                  style={{ background: "#C11119" ,color: "#ffffff",fontWeight: "bold",fontSize: "18px" }}
+                >
+                  Sonraki Film
+                </Button>
+              </div>
+            ): (
+              <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
+                <Button 
+                  fullWidth 
+                  variant="contained" 
+                  color="primary"
+                  onClick={fetchRandomMovie}
+                  style={{ background: "#2E2E2E" ,color: "#ffffff",fontWeight: "bold",fontSize: "18px" }}
+                >
+                  Yeni Film
+                </Button>
+              </div>
+            )}
           </div>
-        ): (
-          <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
-            <Button 
-              fullWidth 
-              variant="contained" 
-              color="primary"
-              onClick={fetchRandomMovie}
-              style={{ background: "#2E2E2E" ,color: "#ffffff",fontWeight: "bold",fontSize: "18px" }}
-            >
-              Yeni Film
-            </Button>
-          </div>
-        )}
-      </div>
-      </div>
-      <div className={styles.lastColumn} style={{ flex: "1" }}>
-        <div className={styles.footer}>
-          <div className={styles.scoringInfo}>
-            <h3>Puanlama Sistemi</h3>
-            <div className={styles.scoreRule}>
-              <span className={styles.scoreDot}></span>
-              <p>Blur azaltmadan bilme: <span className={styles.scoreValue}>+10 puan</span></p>
+        </div>
+        <div className={styles.lastColumn} style={{ flex: "1" }}>
+          <div className={styles.footer}>
+            <div className={styles.scoringInfo}>
+              <h3>Puanlama Sistemi</h3>
+              <div className={styles.scoreRule}>
+                <span className={styles.scoreDot}></span>
+                <p>Blur azaltmadan bilme: <span className={styles.scoreValue}>+10 puan</span></p>
+              </div>
+              <div className={styles.scoreRule}>
+                <span className={styles.scoreDot}></span>
+                <p>Her blur azaltmada: <span className={styles.scoreValue}>-2 puan</span></p>
+              </div>
+              <div className={styles.scoreRule}>
+                <span className={styles.scoreDot}></span>
+                <p>Minimum puan: <span className={styles.scoreValue}>0 puan</span></p>
+              </div>
+              <div className={styles.scoreRule}>
+                <span className={styles.scoreDot}></span>
+                <p>Film bilgisi almak: <span className={styles.scoreValue}>-5 puan</span></p>
+              </div>
             </div>
-            <div className={styles.scoreRule}>
-              <span className={styles.scoreDot}></span>
-              <p>Her blur azaltmada: <span className={styles.scoreValue}>-2 puan</span></p>
+            <div className={styles.footerContent}>
+              <p style={{ fontWeight: "bold" , fontSize: "18px",marginBottom: "8px"}}>Film tahmin oyunu</p>
+              <p>Yapımcı: [Melik Bağrıyanık]</p>
+              <p>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>
             </div>
-            <div className={styles.scoreRule}>
-              <span className={styles.scoreDot}></span>
-              <p>Minimum puan: <span className={styles.scoreValue}>0 puan</span></p>
-            </div>
-          </div>
-          <div className={styles.footerContent}>
-            <p style={{ fontWeight: "bold" , fontSize: "18px",marginBottom: "8px"}}>Film tahmin oyunu</p>
-            <p>Yapımcı: [Melik Bağrıyanık]</p>
-            <p>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>
           </div>
         </div>
       </div>
+
+      <Modal
+        open={showMovieInfo}
+        onClose={handleCloseModal}
+        aria-labelledby="movie-info-modal"
+        aria-describedby="movie-information"
+      >
+        <Box className={styles.modalContent}>
+          <div className={styles.modalHeader}>
+            <h2>Film Hakkında Bilgiler</h2>
+            <Button onClick={handleCloseModal} className={styles.closeButton}>×</Button>
           </div>
+          <div className={styles.modalBody}>
+            <div className={styles.movieInfo}>
+              <p><strong>Yönetmen:</strong> {currentMovie?.director}</p>
+              <p><strong>Çıkış Tarihi:</strong> {currentMovie?.release_date}</p>
+              <p><strong>Özet:</strong> {currentMovie?.overview}</p>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+    </>
   );  
 }

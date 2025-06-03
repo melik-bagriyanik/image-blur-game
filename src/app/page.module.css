@@ -347,3 +347,131 @@ a.secondary {
     filter: invert();
   }
 }
+
+.movieInfo {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.movieInfo p {
+  margin: 8px 0;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.movieInfo p:first-child {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  color: white;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modalHeader h2 {
+  margin: 0;
+  color: #4caf50;
+  font-size: 24px;
+}
+
+.closeButton {
+  color: white !important;
+  font-size: 28px !important;
+  padding: 0 !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.modalBody {
+  padding: 10px 0;
+}
+
+.insufficientPoints {
+  color: #ff6b6b;
+  font-weight: 500;
+  animation: fadeInOut 2s ease-in-out;
+  text-align: center;
+  margin-top: 10px;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.movieInfo {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.movieInfo p {
+  margin: 12px 0;
+  line-height: 1.6;
+  color: #ffffff;
+}
+
+.movieInfo strong {
+  color: #4caf50;
+  margin-right: 8px;
+}
