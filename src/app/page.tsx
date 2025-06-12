@@ -8,6 +8,7 @@ import Skeleton from "@mui/material/Skeleton";
 import ScoreBar from "./components/ScoreBar";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import ShareIcon from '@mui/icons-material/Share';
 
 interface Movie {
   title: string;
@@ -67,12 +68,14 @@ export default function Home() {
   const [blurLevel, setBlurLevel] = useState(20);
   const [guess, setGuess] = useState("");
   const [score, setScore] = useState(0);
+  const [movieCount, setMovieCount] = useState(0);
   const [message, setMessage] = useState("");
   const [showNextButton, setShowNextButton] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [blurReductions, setBlurReductions] = useState(0);
   const [showMovieInfo, setShowMovieInfo] = useState(false);
   const [showInsufficientPoints, setShowInsufficientPoints] = useState(false);
+  const [shareMessage, setShareMessage] = useState("");
 
   const fetchMovieDetails = async (movieId: number) => {
     try {
@@ -149,6 +152,7 @@ export default function Home() {
       setShowNextButton(false);
       setBlurReductions(0);
       setShowMovieInfo(false);
+      setMovieCount(prev => prev + 1);
     } catch (error) {
       console.error("Error fetching movie:", error);
     }
@@ -190,6 +194,26 @@ export default function Home() {
     }
   };
 
+  const handleShare = async () => {
+    const shareText = `🎬 Film Tahmin Oyunu'nda ${movieCount} filmde ${score} puan topladım! 💪\n\nBu skoru geçebilir misin? 😎\n\nhttps://github.com/melik-bagriyanik`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Film Tahmin Oyunu Skorum',
+          text: shareText
+        });
+      } catch (error) {
+        console.error('Paylaşım hatası:', error);
+      }
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard.writeText(shareText);
+      setShareMessage("Skorunuz kopyalandı! Paylaşmak için yapıştırın.");
+      setTimeout(() => setShareMessage(""), 2000);
+    }
+  };
+
   return (
     <>
       <div className={styles.page}>
@@ -221,8 +245,8 @@ export default function Home() {
                 />
               </div>
             )}
-            <div style={{ marginBottom: "10px", height: "40px" }}>
-              <p>Puan: {score}</p>
+            <div style={{ marginBottom: "10px", height: "40px" ,textAlign:"center"}}>
+              <p>Puan: {score} | Film Sayısı: {movieCount}</p>
               {message && <p>{message}</p>}
               {showInsufficientPoints && (
                 <p className={styles.insufficientPoints}>Film bilgisi almak için en az 3 puan gerekli!</p>
@@ -283,7 +307,7 @@ export default function Home() {
                 onClick={handleGetMovieInfo}
                 disabled={showNextButton}
                 style={{
-                  background: "#4caf50",
+                  background: "#121B41",
                   color: "#ffffff",
                   fontSize: "16px"
                 }}
@@ -344,6 +368,31 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.footerContent}>
+              <Button
+                variant="contained"
+                onClick={handleShare}
+                startIcon={<ShareIcon />}
+                style={{
+                  background: "#121B41",
+                  color: "#ffffff",
+                  fontSize: "16px",
+                  marginBottom: "16px",
+                  width: "100%",
+                  padding: "10px"
+                }}
+                sx={{
+                  '&:hover': {
+                    background: "#121B41"
+                  }
+                }}
+              >
+                Skorunu Paylaş
+              </Button>
+              {shareMessage && (
+                <p style={{ color: "#4CAF50", textAlign: "center", marginBottom: "16px" }}>
+                  {shareMessage}
+                </p>
+              )}
               <p style={{ fontWeight: "bold" , fontSize: "18px",marginBottom: "8px"}}>Film tahmin oyunu</p>
               <p>Yapımcı: [Melik Bağrıyanık]</p>
               <p>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>

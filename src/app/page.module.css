@@ -232,7 +232,7 @@ a.secondary {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #4caf50;
+  background: #868686;
   box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
 }
 
@@ -244,7 +244,7 @@ a.secondary {
 }
 
 .scoreValue {
-  color: #4caf50;
+  color: #868686;
   font-weight: 600;
   text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
 }
@@ -262,13 +262,13 @@ a.secondary {
 }
 
 .footerContent a {
-  color: #4caf50;
+  color: #cbcbcb;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .footerContent a:hover {
-  color: #81c784;
+  color: rgb(231, 231, 231);
   text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
 }
 
@@ -366,7 +366,7 @@ a.secondary {
 }
 
 .movieInfo p:first-child {
-  color: #4caf50;
+  color: #E50815;
   font-weight: 600;
 }
 
@@ -410,7 +410,7 @@ a.secondary {
 
 .modalHeader h2 {
   margin: 0;
-  color: #4caf50;
+  color: #E50815;
   font-size: 24px;
 }
 
@@ -436,8 +436,7 @@ a.secondary {
   color: #ff6b6b;
   font-weight: 500;
   animation: fadeInOut 2s ease-in-out;
-  text-align: center;
-  margin-top: 10px;
+
 }
 
 @keyframes fadeInOut {
@@ -472,6 +471,6 @@ a.secondary {
 }
 
 .movieInfo strong {
-  color: #4caf50;
+  color: #E50815;
   margin-right: 8px;
 }
