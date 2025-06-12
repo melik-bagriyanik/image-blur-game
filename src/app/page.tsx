@@ -95,8 +95,8 @@ export default function Home() {
   };
 
   const handleGetMovieInfo = () => {
-    if (score >= 5 && currentMovie) {
-      setScore(prev => prev - 5);
+    if (score >= 3 && currentMovie) {
+      setScore(prev => prev - 3);
       setShowMovieInfo(true);
       if (!currentMovie.director) {
         fetchMovieDetails(currentMovie.id);
@@ -225,15 +225,9 @@ export default function Home() {
               <p>Puan: {score}</p>
               {message && <p>{message}</p>}
               {showInsufficientPoints && (
-                <p className={styles.insufficientPoints}>Film bilgisi almak için en az 5 puan gerekli!</p>
+                <p className={styles.insufficientPoints}>Film bilgisi almak için en az 3 puan gerekli!</p>
               )}
-              {showMovieInfo && currentMovie && (
-                <div className={styles.movieInfo}>
-                  <p>Yönetmen: {currentMovie.director}</p>
-                  <p>Çıkış Tarihi: {currentMovie.release_date}</p>
-                  <p>Özet: {currentMovie.overview}</p>
-                </div>
-              )}
+          
             </div>
           </main>
           <div className={styles.ButtonsContainer}>
@@ -294,7 +288,7 @@ export default function Home() {
                   fontSize: "16px"
                 }}
               >
-                Film Bilgisi Al (5 puan)
+                Film Bilgisi Al (3 puan)
               </Button>
             </div>
 
@@ -325,8 +319,14 @@ export default function Home() {
             )}
           </div>
         </div>
+         
         <div className={styles.lastColumn} style={{ flex: "1" }}>
+          
           <div className={styles.footer}>
+            <div className={styles.scoreRule}>
+         
+                <p>Minimum film sayısıyla maximum puanı topla!</p>
+              </div>
             <div className={styles.scoringInfo}>
               <h3>Puanlama Sistemi</h3>
               <div className={styles.scoreRule}>
@@ -337,13 +337,10 @@ export default function Home() {
                 <span className={styles.scoreDot}></span>
                 <p>Her blur azaltmada: <span className={styles.scoreValue}>-2 puan</span></p>
               </div>
+             
               <div className={styles.scoreRule}>
                 <span className={styles.scoreDot}></span>
-                <p>Minimum puan: <span className={styles.scoreValue}>0 puan</span></p>
-              </div>
-              <div className={styles.scoreRule}>
-                <span className={styles.scoreDot}></span>
-                <p>Film bilgisi almak: <span className={styles.scoreValue}>-5 puan</span></p>
+                <p>Film bilgisi almak: <span className={styles.scoreValue}>-3 puan</span></p>
               </div>
             </div>
             <div className={styles.footerContent}>
