@@ -245,13 +245,12 @@ export default function Home() {
                 />
               </div>
             )}
-            <div style={{ marginBottom: "10px", height: "40px" ,textAlign:"center"}}>
+            <div className={styles.infoWidget} >
               <p>Puan: {score} | Film Sayısı: {movieCount}</p>
               {message && <p>{message}</p>}
               {showInsufficientPoints && (
                 <p className={styles.insufficientPoints}>Film bilgisi almak için en az 3 puan gerekli!</p>
               )}
-          
             </div>
           </main>
           <div className={styles.ButtonsContainer}>
@@ -261,44 +260,45 @@ export default function Home() {
                 variant="contained" 
                 onClick={handleReduceBlur}
                 disabled={blurLevel === 0}
-               style={{ background: "#DDDDDD" ,color: "#000000" ,fontSize: "16px"}}
+                style={{ background: "#DDDDDD", color: "#000000", fontSize: "14px", padding: "6px" }}
               >
-               Bluru azalt
+                Bluru azalt
               </Button>
             </div>
-    <div className={styles.buttonsRow}>
-      <TextField 
-        fullWidth 
-        value={guess}
-        onChange={(e) => setGuess(e.target.value)}
-        placeholder="Film adını yazın"
-        disabled={showNextButton}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !showNextButton) {
-            handleGuess();
-          }
-        }}
-        style={{ 
-          background: "#ffffff",
-          color: "#000000",
-          borderRadius: "5px",
-          fontSize: "16px",
-        }}
-      />
-      <Button 
-        fullWidth 
-        variant="contained" 
-        onClick={handleGuess}
-        disabled={showNextButton}
-        style={{ 
-          background: "#2E2E2E",
-          color: "#ffffff",
-          fontSize: "16px"
-        }}
-      >
-        Tahmin et
-      </Button>
-    </div>
+            <div className={styles.buttonsRow}>
+              <TextField 
+                fullWidth 
+                value={guess}
+                onChange={(e) => setGuess(e.target.value)}
+                placeholder="Film adını yazın"
+                disabled={showNextButton}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !showNextButton) {
+                    handleGuess();
+                  }
+                }}
+                style={{ 
+                  background: "#ffffff",
+                  color: "#000000",
+                  borderRadius: "5px",
+                  fontSize: "14px",
+                }}
+              />
+              <Button 
+                fullWidth 
+                variant="contained" 
+                onClick={handleGuess}
+                disabled={showNextButton}
+                style={{ 
+                  background: "#2E2E2E",
+                  color: "#ffffff",
+                  fontSize: "14px",
+                  padding: "6px"
+                }}
+              >
+                Tahmin et
+              </Button>
+            </div>
 
             <div className={styles.buttonsRow}>
               <Button
@@ -309,7 +309,8 @@ export default function Home() {
                 style={{
                   background: "#121B41",
                   color: "#ffffff",
-                  fontSize: "16px"
+                  fontSize: "14px",
+                  padding: "6px"
                 }}
               >
                 Film Bilgisi Al (3 puan)
@@ -317,25 +318,25 @@ export default function Home() {
             </div>
 
             {showNextButton ? (
-              <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
+              <div className={styles.CenterRow} style={{ marginTop: "5px" }}>
                 <Button 
                   fullWidth 
                   variant="contained" 
                   color="secondary"
                   onClick={fetchRandomMovie}
-                  style={{ background: "#C11119" ,color: "#ffffff",fontWeight: "bold",fontSize: "18px" }}
+                  style={{ background: "#C11119", color: "#ffffff", fontWeight: "bold", fontSize: "16px", padding: "6px" }}
                 >
                   Sonraki Film
                 </Button>
               </div>
             ): (
-              <div className={styles.CenterRow} style={{ marginTop: "10px" }}>
+              <div className={styles.CenterRow} style={{ marginTop: "5px" }}>
                 <Button 
                   fullWidth 
                   variant="contained" 
                   color="primary"
                   onClick={fetchRandomMovie}
-                  style={{ background: "#2E2E2E" ,color: "#ffffff",fontWeight: "bold",fontSize: "18px" }}
+                  style={{ background: "#2E2E2E", color: "#ffffff", fontWeight: "bold", fontSize: "16px", padding: "6px" }}
                 >
                   Yeni Film
                 </Button>
@@ -345,12 +346,10 @@ export default function Home() {
         </div>
          
         <div className={styles.lastColumn} style={{ flex: "1" }}>
-          
           <div className={styles.footer}>
             <div className={styles.scoreRule}>
-         
-                <p>Minimum film sayısıyla maximum puanı topla!</p>
-              </div>
+              <p>Minimum film sayısıyla maximum puanı topla!</p>
+            </div>
             <div className={styles.scoringInfo}>
               <h3>Puanlama Sistemi</h3>
               <div className={styles.scoreRule}>
@@ -361,44 +360,40 @@ export default function Home() {
                 <span className={styles.scoreDot}></span>
                 <p>Her blur azaltmada: <span className={styles.scoreValue}>-2 puan</span></p>
               </div>
-             
               <div className={styles.scoreRule}>
                 <span className={styles.scoreDot}></span>
                 <p>Film bilgisi almak: <span className={styles.scoreValue}>-3 puan</span></p>
               </div>
             </div>
             <div className={styles.footerContent}>
-              <Button
-                variant="contained"
-                onClick={handleShare}
-                startIcon={<ShareIcon />}
-                style={{
-                  background: "#121B41",
-                  color: "#ffffff",
-                  fontSize: "16px",
-                  marginBottom: "16px",
-                  width: "100%",
-                  padding: "10px"
-                }}
-                sx={{
-                  '&:hover': {
-                    background: "#121B41"
-                  }
-                }}
-              >
-                Skorunu Paylaş
-              </Button>
-              {shareMessage && (
-                <p style={{ color: "#4CAF50", textAlign: "center", marginBottom: "16px" }}>
-                  {shareMessage}
-                </p>
-              )}
-              <p style={{ fontWeight: "bold" , fontSize: "18px",marginBottom: "8px"}}>Film tahmin oyunu</p>
+              <p style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "8px" }}>Film tahmin oyunu</p>
               <p>Yapımcı: [Melik Bağrıyanık]</p>
               <p>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>
             </div>
           </div>
         </div>
+      </div>
+
+      <div className={styles.mobileShareButton}>
+        <Button
+          variant="contained"
+          onClick={handleShare}
+          startIcon={<ShareIcon />}
+          style={{
+            background: "#121B41",
+            color: "#ffffff",
+            fontSize: "14px",
+            padding: "6px",
+            width: "100%"
+          }}
+          sx={{
+            '&:hover': {
+              background: "#121B41"
+            }
+          }}
+        >
+          Skorunu Paylaş
+        </Button>
       </div>
 
       <Modal
