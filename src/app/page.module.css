@@ -184,7 +184,7 @@
   padding: 0;
   filter: contrast(0.5);
 }
-@media  (max-height: 790) {
+@media  (max-height: 790) and (max-width: 768px)   {
  .middleColumn {
 
      margin-top: 0px !important;
