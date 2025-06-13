@@ -36,8 +36,27 @@ interface LeaderboardEntry {
 
 // String similarity function
 function calculateSimilarity(str1: string, str2: string): number {
-  const s1 = str1.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const s2 = str2.toLowerCase().replace(/[^a-z0-9]/g, '');
+  // Stringleri normalize et
+  const normalizeString = (str: string) => {
+    return str.toLowerCase()
+      .replace(/[^a-z0-9]/g, '') // Alfanumerik olmayan karakterleri kaldır
+      .replace(/the/g, '') // "the" kelimesini kaldır
+      .replace(/a/g, '') // "a" kelimesini kaldır
+      .replace(/an/g, '') // "an" kelimesini kaldır
+      .replace(/der/g, '') // "der" kelimesini kaldır
+      .replace(/die/g, '') // "die" kelimesini kaldır
+      .replace(/das/g, '') // "das" kelimesini kaldır
+      .replace(/le/g, '') // "le" kelimesini kaldır
+      .replace(/la/g, '') // "la" kelimesini kaldır
+      .replace(/les/g, '') // "les" kelimesini kaldır
+      .replace(/il/g, '') // "il" kelimesini kaldır
+      .replace(/el/g, '') // "el" kelimesini kaldır
+      .replace(/los/g, '') // "los" kelimesini kaldır
+      .replace(/las/g, ''); // "las" kelimesini kaldır
+  };
+
+  const s1 = normalizeString(str1);
+  const s2 = normalizeString(str2);
   
   if (s1.length === 0 || s2.length === 0) return 0;
   
@@ -45,6 +64,19 @@ function calculateSimilarity(str1: string, str2: string): number {
   const shorter = s1.length > s2.length ? s2 : s1;
   
   if (longer.length === 0) return 1.0;
+  
+  // Eğer biri diğerinin içinde geçiyorsa bonus puan ver
+  if (longer.includes(shorter)) {
+    return 0.9;
+  }
+
+  // Eğer kelimelerin çoğu eşleşiyorsa bonus puan ver
+  const words1 = s1.split(/\s+/);
+  const words2 = s2.split(/\s+/);
+  const commonWords = words1.filter(word => words2.includes(word));
+  if (commonWords.length >= Math.min(words1.length, words2.length) * 0.7) {
+    return 0.85;
+  }
   
   return (longer.length - editDistance(longer, shorter)) / longer.length;
 }
@@ -240,7 +272,7 @@ export default function Home() {
     const similarityWithOriginalTitle = calculateSimilarity(guess, currentMovie.original_title);
     const similarity = Math.max(similarityWithTitle, similarityWithOriginalTitle);
     
-    if (similarity >= 0.8) {
+    if (similarity >= 0.65) {
       const pointsToAdd = Math.max(0, 10 - (blurReductions * 2));
       setScore((prev) => prev + pointsToAdd);
       const correctTitle = similarityWithTitle >= similarityWithOriginalTitle ? currentMovie.title : currentMovie.original_title;
