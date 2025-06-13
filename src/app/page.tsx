@@ -16,6 +16,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import MenuIcon from '@mui/icons-material/Menu';
 
 interface Movie {
   title: string;
@@ -92,6 +93,7 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [showUsernameModal, setShowUsernameModal] = useState(true);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const fetchMovieDetails = async (movieId: number) => {
     try {
@@ -341,9 +343,6 @@ export default function Home() {
                   color: "#000000",
                   borderRadius: "5px",
                   fontSize: "14px",
-            
-        
-            
                 }}
               />
               <Button 
@@ -374,7 +373,6 @@ export default function Home() {
                   fontSize: "14px",
                   padding: "6px",
                   height:"42px"
-
                 }}
               >
                 Film Bilgisi Al (3 puan)
@@ -463,6 +461,61 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <div className={styles.mobileMenuButton}>
+        <Button
+          variant="contained"
+          onClick={() => setShowMobileMenu(!showMobileMenu)}
+          startIcon={<MenuIcon />}
+          style={{
+            background: "#121B41",
+            color: "#ffffff",
+            fontSize: "14px",
+            padding: "6px",
+            width: "100%"
+          }}
+        >
+          En İyiler
+        </Button>
+      </div>
+
+      <Modal
+        open={showMobileMenu}
+        onClose={() => setShowMobileMenu(false)}
+        aria-labelledby="mobile-menu-modal"
+      >
+        <Box className={styles.mobileMenuContent}>
+          <div className={styles.modalHeader}>
+            <h2>En İyiler</h2>
+            <Button onClick={() => setShowMobileMenu(false)} className={styles.closeButton}>×</Button>
+          </div>
+          <div className={styles.modalBody}>
+            <div className={styles.leaderboardContainer}>
+              <p style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.7)', marginBottom: '15px', fontSize: '14px' }}>En yüksek puanlı 5 oyuncu</p>
+              <TableContainer component={Paper} className={styles.leaderboardTable}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>İsim</TableCell>
+                      <TableCell align="right">Puan</TableCell>
+                      <TableCell align="right">Film</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {leaderboard.map((entry, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{entry.name}</TableCell>
+                        <TableCell align="right">{entry.score}</TableCell>
+                        <TableCell align="right">{entry.movieCount}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          </div>
+        </Box>
+      </Modal>
 
       <div className={styles.mobileShareButton}>
         <Button
