@@ -6,7 +6,7 @@
   flex-direction: row;
   gap: 32px;
   width: 100%;
-  background-image: url('/yıldızlar.jpg');
+  background-image: url('/stars.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -19,10 +19,11 @@
   position: absolute;
   top: 0;
   left: 0;
-  /* backdrop-filter: brightness(0.9); */
+  /* backdrop-filter: brightness(0.7); */
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 32, 0.7);
+  /* background: rgba(0, 0, 0, 0.7); */
   z-index: 0;
 }
 
@@ -72,7 +73,6 @@
   justify-content: center;
   width: 100%;
   margin-top: 10px;
-  height: 45px;
 }
 
 .ButtonsContainer {
