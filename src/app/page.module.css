@@ -170,6 +170,13 @@
   .infoWidget{
     margin-top: 30px;
   }
+  .middleColumn {
+    
+ justify-content: center;
+        display: flex;
+        flex-direction: column;
+
+  }
   .page {
     flex-direction: column;
     padding: 10px;
@@ -272,8 +279,9 @@
   padding-top: 20px;
   justify-content: center;
   align-items: center;
-  min-height: 540px;
+
 }
+
 
 .main ol {
   font-family: var(--font-geist-mono);
