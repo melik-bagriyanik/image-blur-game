@@ -247,7 +247,7 @@ export default function Home() {
             )}
             <div className={styles.infoWidget} >
               <p className={styles.infoText}> Puan: {score} | Film Sayısı: {movieCount}</p>
-              {message && <p className={styles.infoText}>{message}</p>}
+              {message && <p className={styles.messageText}>{message}</p>}
               {showInsufficientPoints && (
                 <p className={styles.insufficientPoints}>Film bilgisi almak için en az 3 puan gerekli!</p>
               )}
