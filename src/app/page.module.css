@@ -184,7 +184,8 @@
   padding: 0;
   filter: contrast(0.5);
 }
-@media  (max-height: 665) and (max-width: 768px)   {
+
+@media   (max-height: 590px) and (max-height: 665px) and (max-width: 768px)   {
  .middleColumn {
 
      margin-top: 0px !important;
@@ -196,7 +197,7 @@
   }
 
 }
-@media  (min-height: 665) and (max-height: 790) and (max-width: 768px)   {
+@media  (min-height: 665px) and (max-height: 790px) and (max-width: 768px)   {
  .middleColumn {
 
      margin-top: 0px !important;
@@ -208,12 +209,29 @@
   }
 
 }
-@media (max-width: 768px) {
+@media screen and (max-width:768px) {
+   .mobileShareButton {
+    display: block;
+    padding: 8px;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  .page{
+align-items: start !important;
+padding: 10px;
+}
+}
+@media (max-width: 768px) and (min-height: 790px)  {
   /* .infoWidget{
     margin-top: 30px;
   } */
   .middleColumn {
-    justify-content: start;
+    justify-content: flex-start;
     display: flex;
     flex-direction: column;
     margin-top: 20px;
@@ -272,17 +290,7 @@
     font-size: 14px;
   }
 
-  .mobileShareButton {
-    display: block;
-    padding: 8px;
-
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-  }
+ 
 
   .lastColumn {
     margin-bottom: 50px;
@@ -306,6 +314,26 @@
 
   .buttonsRow .MuiInputBase-root {
     min-height: 36px;
+  }
+}
+
+@media (max-width: 768px) and (max-height: 665px) {
+  .middleColumn {
+    margin-top: 0px !important;
+  }
+  .imageContainer {
+    width: 170px !important;
+    height: 215px !important;
+  }
+}
+
+@media (max-width: 768px) and (min-height: 665px) and (max-height: 790px) {
+  .middleColumn {
+    margin-top: 0px !important;
+  }
+  .imageContainer {
+    height: 290px !important;
+    width: 250px !important;
   }
 }
 
