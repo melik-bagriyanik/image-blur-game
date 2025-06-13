@@ -19,7 +19,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  backdrop-filter: brightness(0.5);
+  /* backdrop-filter: brightness(0.9); */
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -37,7 +37,7 @@
   height: 100%;
   border-radius: 16px;
   font-family: var(--font-oswald);
-  backdrop-filter: blur(5px);
+  /* backdrop-filter: blur(5px); */
 }
 
 .lastColumn {
@@ -49,7 +49,7 @@
   min-height: 100vh;
   justify-content: center;
   display: flex;
-  background-image: url('/movie.jpg');
+  /* background-image: url('/movie.jpg'); */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -62,7 +62,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  /* background: rgba(0, 0, 0, 0.85); */
   z-index: 0;
 }
 
@@ -165,6 +165,16 @@
   margin-bottom: 20px;
   text-align: center;
   height: 30px;
+
+ 
+}
+.infoText {
+  font-size: 14px;
+  color: #ffffff !important;
+  margin-top: 10px;
+  padding: 0;
+  filter: contrast(0.5);
+
 }
 @media (max-width: 768px) {
   .infoWidget{
@@ -276,9 +286,9 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  padding-top: 20px;
   justify-content: center;
   align-items: center;
+  padding-top: 10px;
 
 }
 

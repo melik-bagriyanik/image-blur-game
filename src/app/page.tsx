@@ -246,8 +246,8 @@ export default function Home() {
               </div>
             )}
             <div className={styles.infoWidget} >
-              <p>Puan: {score} | Film Sayısı: {movieCount}</p>
-              {message && <p>{message}</p>}
+              <p className={styles.infoText}> Puan: {score} | Film Sayısı: {movieCount}</p>
+              {message && <p className={styles.infoText}>{message}</p>}
               {showInsufficientPoints && (
                 <p className={styles.insufficientPoints}>Film bilgisi almak için en az 3 puan gerekli!</p>
               )}
@@ -260,7 +260,7 @@ export default function Home() {
                 variant="contained" 
                 onClick={handleReduceBlur}
                 disabled={blurLevel === 0}
-                style={{ background: "#DDDDDD", color: "#000000", fontSize: "14px", padding: "6px" }}
+                style={{ background: "#DDDDDD", color: "#000000", fontSize: "14px", padding: "6px",marginTop: "15px" }}
               >
                 Bluru azalt
               </Button>
