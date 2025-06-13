@@ -282,6 +282,9 @@ export default function Home() {
                   color: "#000000",
                   borderRadius: "5px",
                   fontSize: "14px",
+            
+        
+            
                 }}
               />
               <Button 
@@ -310,7 +313,9 @@ export default function Home() {
                   background: "#121B41",
                   color: "#ffffff",
                   fontSize: "14px",
-                  padding: "6px"
+                  padding: "6px",
+                  height:"42px"
+
                 }}
               >
                 Film Bilgisi Al (3 puan)
