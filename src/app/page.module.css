@@ -89,8 +89,8 @@
 .footer {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  padding-top: 20px;
+
+
   justify-content: center;
   align-items: center;
   min-height: 540px;
@@ -99,7 +99,7 @@
 .footerContent {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+ gap: 10px;
   padding: 20px;
   position: relative;
 }
@@ -126,7 +126,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
@@ -226,7 +226,7 @@
   .footer {
     min-height: auto;
     gap: 10px;
-    padding-top: 10px;
+    padding-top: 0;
   }
 
   .scoringInfo {
@@ -425,6 +425,31 @@ a.secondary {
   overflow-y: auto;
 }
 
+.modalContent .MuiTextField-root {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.modalContent .MuiTextField-root .MuiInputBase-root {
+  color: #ffffff;
+}
+
+.modalContent .MuiTextField-root .MuiInputBase-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.modalContent .MuiTextField-root .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.modalContent .MuiTextField-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.modalContent .MuiTextField-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
 .modalHeader {
   display: flex;
   justify-content: space-between;
@@ -436,7 +461,7 @@ a.secondary {
 
 .modalHeader h2 {
   margin: 0;
-  color: #E50815;
+  color: #ffffff;
   font-size: 24px;
 }
 
@@ -501,5 +526,67 @@ a.secondary {
 @media (prefers-color-scheme: dark) {
   .logo {
     filter: invert();
+  }
+}
+
+.leaderboardContainer {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaderboardContainer h3 {
+  color: #ffffff;
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+}
+
+.leaderboardTable {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.leaderboardTable th {
+  background: rgba(0, 0, 0, 0.2) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.leaderboardTable td {
+  color: #ffffff !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.leaderboardTable tr:last-child td {
+  border-bottom: none !important;
+}
+
+.leaderboardTable tr:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+@media (max-width: 768px) {
+  .leaderboardContainer {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .leaderboardContainer h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .leaderboardTable th,
+  .leaderboardTable td {
+    padding: 8px !important;
+    font-size: 14px !important;
   }
 }

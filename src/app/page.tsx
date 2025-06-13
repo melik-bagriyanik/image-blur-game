@@ -9,6 +9,13 @@ import ScoreBar from "./components/ScoreBar";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import ShareIcon from '@mui/icons-material/Share';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 interface Movie {
   title: string;
@@ -18,6 +25,12 @@ interface Movie {
   overview?: string;
   release_date?: string;
   id: number;
+}
+
+interface LeaderboardEntry {
+  name: string;
+  score: number;
+  movieCount: number;
 }
 
 // String similarity function
@@ -76,6 +89,9 @@ export default function Home() {
   const [showMovieInfo, setShowMovieInfo] = useState(false);
   const [showInsufficientPoints, setShowInsufficientPoints] = useState(false);
   const [shareMessage, setShareMessage] = useState("");
+  const [username, setUsername] = useState("");
+  const [showUsernameModal, setShowUsernameModal] = useState(true);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
   const fetchMovieDetails = async (movieId: number) => {
     try {
@@ -162,6 +178,13 @@ export default function Home() {
     fetchRandomMovie();
   }, []);
 
+  useEffect(() => {
+    const savedLeaderboard = localStorage.getItem('leaderboard');
+    if (savedLeaderboard) {
+      setLeaderboard(JSON.parse(savedLeaderboard));
+    }
+  }, []);
+
   const handleReduceBlur = () => {
     const newBlurLevel = Math.max(0, blurLevel - 5);
     setBlurLevel(newBlurLevel);
@@ -171,6 +194,41 @@ export default function Home() {
       setMessage("Bilemedin! Doğru cevap: " + currentMovie?.title);
       setShowNextButton(true);
     }
+  };
+
+  const handleUsernameSubmit = () => {
+    if (username.trim()) {
+      setShowUsernameModal(false);
+    }
+  };
+
+  const updateLeaderboard = () => {
+    // Mevcut leaderboard'u kopyala
+    const updatedLeaderboard = [...leaderboard];
+    
+    // Aynı isimdeki kullanıcının mevcut skorunu bul
+    const existingUserIndex = updatedLeaderboard.findIndex(entry => entry.name === username);
+    
+    // Yeni skor
+    const newEntry = { name: username, score, movieCount };
+    
+    if (existingUserIndex !== -1) {
+      // Eğer yeni skor daha yüksekse güncelle
+      if (score > updatedLeaderboard[existingUserIndex].score) {
+        updatedLeaderboard[existingUserIndex] = newEntry;
+      }
+    } else {
+      // Yeni kullanıcı ekle
+      updatedLeaderboard.push(newEntry);
+    }
+    
+    // Skorlara göre sırala ve en yüksek 5'i al
+    const sortedLeaderboard = updatedLeaderboard
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5);
+    
+    setLeaderboard(sortedLeaderboard);
+    localStorage.setItem('leaderboard', JSON.stringify(sortedLeaderboard));
   };
 
   const handleGuess = () => {
@@ -188,6 +246,7 @@ export default function Home() {
       setBlurLevel(0);
       setTimeout(() => {
         fetchRandomMovie();
+        updateLeaderboard();
       }, 2000);
     } else {
       setMessage("Yanlış tahmin, tekrar dene!");
@@ -352,9 +411,34 @@ export default function Home() {
          
         <div className={styles.lastColumn} style={{ flex: "1" }}>
           <div className={styles.footer}>
-            <div className={styles.scoreRule}>
+              <div className={styles.scoreRule}>
               <p>Minimum film sayısıyla maximum puanı topla!</p>
             </div>
+            <div className={styles.leaderboardContainer}>
+              <h3>En İyiler</h3>
+              <p style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.7)', marginBottom: '15px', fontSize: '14px' }}>En yüksek puanlı 5 oyuncu</p>
+              <TableContainer component={Paper} className={styles.leaderboardTable}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>İsim</TableCell>
+                      <TableCell align="right">Puan</TableCell>
+                      <TableCell align="right">Film</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {leaderboard.map((entry, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{entry.name}</TableCell>
+                        <TableCell align="right">{entry.score}</TableCell>
+                        <TableCell align="right">{entry.movieCount}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          
             <div className={styles.scoringInfo}>
               <h3>Puanlama Sistemi</h3>
               <div className={styles.scoreRule}>
@@ -371,9 +455,10 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.footerContent}>
-              <p style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "8px" }}>Film tahmin oyunu</p>
+              <p style={{display:"flex"}} >Bu oyun, film bilgilerini <a href="https://www.themoviedb.org/">TMDb API</a> kullanarak sunmaktadır.</p>
+             
               <p>Yapımcı: [Melik Bağrıyanık]</p>
-              <p>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>
+              <p style={{display:"flex"}}>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>
             </div>
           </div>
         </div>
@@ -417,6 +502,53 @@ export default function Home() {
               <p><strong>Yönetmen:</strong> {currentMovie?.director}</p>
               <p><strong>Çıkış Tarihi:</strong> {currentMovie?.release_date}</p>
               <p><strong>Özet:</strong> {currentMovie?.overview}</p>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={showUsernameModal}
+        onClose={() => {}}
+        aria-labelledby="username-modal"
+      >
+        <Box className={styles.modalContent}>
+          <div className={styles.modalHeader}>
+            <h2>Hoş Geldin!</h2>
+          </div>
+          <div className={styles.modalBody}>
+            <p style={{marginBottom: '10px'}}>En iyiler listesinde yer almak istiyorsan adını yaz!</p>
+            <TextField
+              fullWidth
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="İsminizi yazın"
+              style={{ marginBottom: '20px' ,background: "#ffffff", color: "#000000", borderRadius: "5px", fontSize: "14px" }}
+            />
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={handleUsernameSubmit}
+                disabled={!username.trim()}
+                style={{ background: "#121B41", color: "#ffffff" }}
+              >
+                Başla
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={() => {
+                  setUsername("Misafir");
+                  setShowUsernameModal(false);
+                }}
+                style={{ 
+                  borderColor: "rgba(255, 255, 255, 0.3)",
+                  color: "#ffffff"
+                }}
+              >
+                Hayır, teşekkürler
+              </Button>
             </div>
           </div>
         </Box>
