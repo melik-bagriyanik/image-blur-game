@@ -263,9 +263,14 @@ const handleReduceBlur = () => {
       updatedLeaderboard.push(newEntry);
     }
     
-    // Skorlara göre sırala ve en yüksek 5'i al
+    // Önce puana göre sırala, aynı puanlar için film sayısına göre sırala (azdan çoğa)
     const sortedLeaderboard = updatedLeaderboard
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => {
+        if (b.score === a.score) {
+          return a.movieCount - b.movieCount; // Aynı puanda film sayısı az olan üstte
+        }
+        return b.score - a.score; // Önce puana göre sırala
+      })
       .slice(0, 5);
     
     setLeaderboard(sortedLeaderboard);
