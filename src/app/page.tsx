@@ -513,8 +513,8 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.footerContent}>
-              <p style={{display:"flex"}} >Bu oyun, film bilgilerini <a href="https://www.themoviedb.org/">TMDb API</a> kullanarak sunmaktadır.</p>
-             
+              <p style={{display:"flex"}} >Bu oyun, film bilgilerini <a style={{margin:"0 5px"}} href="https://www.themoviedb.org/">TMDb API</a> kullanarak sunmaktadır.</p>
+
               <p>Yapımcı: [Melik Bağrıyanık]</p>
               <p style={{display:"flex"}}>Github: <a href="https://github.com/melik-bagriyanik">https://github.com/melik-bagriyanik</a></p>
             </div>
