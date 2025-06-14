@@ -17,6 +17,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Snackbar, Alert } from '@mui/material';
 
 interface Movie {
   title: string;
@@ -126,6 +127,8 @@ export default function Home() {
   const [showUsernameModal, setShowUsernameModal] = useState(true);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const fetchMovieDetails = async (movieId: number) => {
     try {
@@ -155,8 +158,8 @@ export default function Home() {
         fetchMovieDetails(currentMovie.id);
       }
     } else {
-      setShowInsufficientPoints(true);
-      setTimeout(() => setShowInsufficientPoints(false), 2000);
+      setToastMessage("Film bilgisi almak için en az 3 puan gerekli!");
+      setShowToast(true);
     }
   };
 
@@ -164,21 +167,34 @@ export default function Home() {
     setShowMovieInfo(false);
   };
 
+  const handleCloseToast = () => {
+    setShowToast(false);
+  };
+
   const fetchRandomMovie = async () => {
-    const categories = ['top_rated'];
-    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-    const randomPage = Math.floor(Math.random() * 50) + 1;
+    let randomPage;
+
+    if (movieCount < 5) {
+      // İlk 5 film için sayfa 1–3
+      randomPage = Math.floor(Math.random() * 3) + 1;
+    } else if (movieCount < 10) {
+      // Sonraki 5 film için sayfa 3–20
+      randomPage = Math.floor(Math.random() * (20 - 3 + 1)) + 3;
+    } else {
+      // 10 ve sonrası için sayfa 20–50
+      randomPage = Math.floor(Math.random() * (50 - 20 + 1)) + 20;
+    }
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${randomCategory}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=tr-TR&page=${randomPage}`
+        `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=tr-TR&page=${randomPage}`
       );
       const data = await response.json();
 
       const moviesWithPoster = data.results.filter(
         (movie: any) =>
           movie.poster_path &&
-          !["cn", "zh", "ru","ja"].includes(movie.original_language)
+          !["cn", "zh", "ru", "ja"].includes(movie.original_language)
       );
 
       if (moviesWithPoster.length === 0) {
@@ -187,7 +203,7 @@ export default function Home() {
       }
 
       const randomMovie = moviesWithPoster[Math.floor(Math.random() * moviesWithPoster.length)];
-      
+
       setImageLoaded(false);
       setCurrentMovie({
         title: randomMovie.title,
@@ -219,23 +235,23 @@ export default function Home() {
     }
   }, []);
 
-const handleReduceBlur = () => {
-  const nextReduction = blurReductions + 1;
+  const handleReduceBlur = () => {
+    const nextReduction = blurReductions + 1;
 
-  // 5. tıklamaya kadar blur seviyesini azalt
-  if (nextReduction <= 5) {
-    const newBlurLevel = Math.max(0, blurLevel - 5); // 5. tıklamada sıfırlanır
-    setBlurLevel(newBlurLevel);
-    setBlurReductions(nextReduction);
-  }
+    // 5. tıklamaya kadar blur seviyesini azalt
+    if (nextReduction <= 4) {
+      const newBlurLevel = Math.max(0, blurLevel - 5); // 5. tıklamada sıfırlanır
+      setBlurLevel(newBlurLevel);
+      setBlurReductions(nextReduction);
+    }
 
-  // 6. tıklamada (yani 5 kez tıkladıktan sonra)
-  if (nextReduction === 6) {
-    setMessage("Bilemedin! Doğru cevap: " + currentMovie?.title);
-    setShowNextButton(true);
-  }
-};
-
+    // 6. tıklamada (yani 5 kez tıkladıktan sonra)
+    if (nextReduction === 5) {
+      setBlurLevel(0);
+      setMessage(`Bilemedin! Doğru cevap: ${currentMovie?.title} (${currentMovie?.original_title})`);
+      setShowNextButton(true);
+    }
+  };
 
   const handleUsernameSubmit = () => {
     if (username.trim()) {
@@ -650,6 +666,21 @@ const handleReduceBlur = () => {
           </div>
         </Box>
       </Modal>
+
+      <Snackbar 
+        open={showToast} 
+        autoHideDuration={3000} 
+        onClose={handleCloseToast}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseToast} 
+          severity="warning" 
+          sx={{ width: '100%' }}
+        >
+          {toastMessage}
+        </Alert>
+      </Snackbar>
     </>
   );  
 }
