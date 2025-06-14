@@ -196,7 +196,7 @@ export default function Home() {
         id: randomMovie.id
       });
 
-      setBlurLevel(20);
+      setBlurLevel(25);
       setGuess("");
       setMessage("");
       setShowNextButton(false);
@@ -219,16 +219,23 @@ export default function Home() {
     }
   }, []);
 
-  const handleReduceBlur = () => {
-    const newBlurLevel = Math.max(0, blurLevel - 5);
+const handleReduceBlur = () => {
+  const nextReduction = blurReductions + 1;
+
+  // 5. tıklamaya kadar blur seviyesini azalt
+  if (nextReduction <= 5) {
+    const newBlurLevel = Math.max(0, blurLevel - 5); // 5. tıklamada sıfırlanır
     setBlurLevel(newBlurLevel);
-    setBlurReductions(prev => prev + 1);
-    
-    if (newBlurLevel === 0) {
-      setMessage("Bilemedin! Doğru cevap: " + currentMovie?.title);
-      setShowNextButton(true);
-    }
-  };
+    setBlurReductions(nextReduction);
+  }
+
+  // 6. tıklamada (yani 5 kez tıkladıktan sonra)
+  if (nextReduction === 6) {
+    setMessage("Bilemedin! Doğru cevap: " + currentMovie?.title);
+    setShowNextButton(true);
+  }
+};
+
 
   const handleUsernameSubmit = () => {
     if (username.trim()) {
